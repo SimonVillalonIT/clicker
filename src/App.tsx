@@ -1,25 +1,26 @@
 import AppContextProvider from "./contexts/app";
-import { Countdown, Balance, Information, Clicker, Upgrades } from "./components";
+import { Miscellaneous, Score, Clicker, Footer, Upgrades } from "./components";
 
 export default function App() {
     return (
         <AppContextProvider>
-            <main className="flex min-h-screen flex-col items-center gap-y-24 bg-zinc-950 pt-24 text-white">
-                <section className="flex flex-col items-center gap-y-4">
-                    <Countdown />
+            <img src="/imgs/bg.jpg" className="fixed -z-[1] min-h-screen opacity-50" />
 
-                    <Balance />
+            <div className="grid min-h-screen w-full grid-cols-[2fr_6fr_2fr] divide-x divide-neutral-900">
+                <Miscellaneous />
 
-                    <Information />
+                <section className="grid grid-rows-[2fr_6fr_2fr]">
+                    <Score />
 
+                    <main className="grid place-items-center">
+                        <Clicker />
+                    </main>
+
+                    <Footer />
                 </section>
 
-                <section className="flex flex-col items-center">
-                    <Clicker />
-                </section>
-                
                 <Upgrades />
-            </main>
+            </div>
         </AppContextProvider>
     );
 }

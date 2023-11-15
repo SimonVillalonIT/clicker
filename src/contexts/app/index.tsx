@@ -17,83 +17,74 @@ export function useAppContext() {
 
 export default function AppContextProvider({ children }: React.PropsWithChildren) {
     const [state, dispatch] = React.useReducer(reducer, initialState);
-    const clickerRef = React.useRef<HTMLImageElement | null>(null);
+    const clickerRef = React.useRef<HTMLDivElement | null>(null);
 
     const endGame: EndGame = React.useCallback(() => {
         dispatch({
             type: Types.END_GAME,
+            payload: null,
         });
     }, []);
 
-    const handleUpgrade: HandleUpgrade = upgrade => {
-        if (state.balance < upgrade.price) return;
+    const handleUpgrade: HandleUpgrade = (upgrade, nextTier) => {
+        if (state.balance < nextTier.price) return;
 
         dispatch({
-            type: Types.HANDLE_UPGRADE,
-            payload: upgrade,
+            type: Types.UPDATE_UPGRADE_TIER,
+            payload: {
+                upgrade,
+                nextTier,
+            },
         });
     };
+
+    const handleClick = React.useCallback(
+        (e: KeyboardEvent) => {
+            e.preventDefault();
+
+            if (e.key !== ".") return;
+
+            if (!state.started) {
+                return dispatch({
+                    type: Types.START_GAME,
+                    payload: null,
+                });
+            }
+
+            dispatch({
+                type: Types.INCREMENT_BALANCE,
+                payload: state.balancePerClick,
+            });
+        },
+        [state.started, state.balancePerClick],
+    );
+
+    const handleSecond = React.useCallback(() => {
+        dispatch({
+            type: Types.INCREMENT_BALANCE,
+            payload: state.balancePerSecond,
+        });
+    }, [state.balancePerSecond]);
+
+    React.useEffect(() => {
+        if (state.ended) return;
+
+        window.addEventListener("keyup", handleClick);
+
+        return () => window.removeEventListener("keyup", handleClick);
+    }, [state.ended, handleClick]);
 
     React.useEffect(() => {
         if (!state.started || state.ended || !state.balancePerSecond) return;
 
-        const interval = setInterval(() => {
-            dispatch({
-                type: Types.UPDATE_BALANCE,
-                payload: state.balancePerSecond,
-            });
-        }, 1000);
+        const interval = setInterval(handleSecond, 1000);
 
-        return () => {
-            clearInterval(interval);
-        };
-    }, [state.started, state.ended, state.balancePerSecond]);
-
-    const handleClick = React.useCallback(() => {
-        if (state.ended) return;
-
-        clickerRef?.current?.classList.add("scale-110");
-        setTimeout(() => {
-            clickerRef?.current?.classList.remove("scale-110");
-        }, 75);
-
-        if (!state.started) {
-            return dispatch({
-                type: Types.START_GAME,
-            });
-        }
-
-        dispatch({
-            type: Types.UPDATE_BALANCE,
-            payload: state.balancePerClick,
-        });
-    }, [state.started, state.ended, state.balancePerClick]);
-
-    React.useEffect(() => {
-        const handleKeyUp = (e: KeyboardEvent) => {
-            e.preventDefault();
-
-            switch (e.key) {
-                case "0":
-                    return handleClick();
-
-                default:
-                    return;
-            }
-        };
-
-        window.addEventListener("keyup", handleKeyUp);
-
-        return () => window.removeEventListener("keyup", handleKeyUp);
-    }, [handleClick]);
+        return () => clearInterval(interval);
+    }, [state.started, state.ended, state.balancePerSecond, handleSecond]);
 
     return (
         <AppContext.Provider value={{ ...state, clickerRef, endGame, handleUpgrade }}>
             {children}
-
-            {/* <div className="fixed left-0 top-0 max-h-[100vh] overflow-y-auto bg-white p-2.5 text-xs text-black">
-                <pre>{JSON.stringify(state, null, 4)}</pre>
-            </div> */}
         </AppContext.Provider>
     );
 }

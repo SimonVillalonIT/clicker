@@ -8,7 +8,7 @@ export default function reducer(state: AppState, action: AppAction): AppState {
             return {
                 ...state,
                 started: true,
-                balance: state.balancePerClick,
+                balance: state.balance + state.balancePerClick,
             };
 
         case Types.END_GAME:
@@ -17,25 +17,36 @@ export default function reducer(state: AppState, action: AppAction): AppState {
                 ended: true,
             };
 
-        case Types.UPDATE_BALANCE:
+        case Types.INCREMENT_BALANCE:
             return {
                 ...state,
                 balance: state.balance + payload,
             };
 
-        case Types.HANDLE_UPGRADE:
+        case Types.UPDATE_UPGRADE_TIER: {
+            const { balance, balancePerClick, balancePerSecond, upgrades } = state;
+            const { id, type, tiers } = payload.upgrade;
+            const { tier, price, reward } = payload.nextTier;
+
             return {
                 ...state,
-                balance: state.balance - payload.price,
-                ...(payload.type === "click"
-                    ? { balancePerClick: state.balancePerClick + payload.value }
-                    : { balancePerSecond: state.balancePerSecond + payload.value }),
-                upgrades: state.upgrades.map(upgrade =>
-                    upgrade.key === payload.key
-                        ? { ...upgrade, price: Math.ceil(payload.price * 1.25) }
-                        : upgrade,
-                ),
+                balance: balance - price,
+                upgrades: upgrades.map(upgrade => {
+                    if (upgrade.id !== id) return upgrade;
+
+                    return {
+                        ...upgrade,
+                        tiers: [
+                            ...tiers.filter(upgradeTier => upgradeTier.tier !== tier),
+                            { ...payload.nextTier, purchased: true },
+                        ],
+                    };
+                }),
+                ...(type === "click"
+                    ? { balancePerClick: balancePerClick + reward }
+                    : { balancePerSecond: balancePerSecond + reward }),
             };
+        }
 
         default:
             return state;
