@@ -19,7 +19,9 @@ export default function App() {
                     <Footer />
                 </section>
 
-                <Upgrades />
+                {
+                    //<Upgrades />
+                }
             </div>
         </AppContextProvider>
     );
