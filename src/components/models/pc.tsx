@@ -1,40 +1,41 @@
-import { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
-import { Html, useProgress } from "@react-three/drei";
+import * as React from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, Preload, useGLTF, Html, useProgress } from "@react-three/drei";
+import * as THREE from "three";
 
 const CanvasLoader = () => {
     const { progress } = useProgress();
+
     return (
-        <Html
-            as="div"
-            center
-            style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-            }}
-        >
+        <Html as="div" className="flex flex-col items-center justify-center" center>
             <span className="canvas-loader"></span>
-            <p
-                style={{
-                    fontSize: 14,
-                    color: "#F1F1F1",
-                    fontWeight: 800,
-                    marginTop: 40,
-                }}
-            >
-                {progress.toFixed(2)}%
-            </p>
+            <p className="mt-10 text-sm font-bold text-white">{progress.toFixed(2)}%</p>
         </Html>
     );
 };
 
 function PcModel() {
-    const pc = useGLTF("/models/scene.gltf");
+    const pc = useGLTF("/models/old_pc.glb");
+    const pcRef = React.useRef<THREE.mesh>(null);
+
+    const [direction, setDirection] = React.useState(1); // Estado para controlar la dirección de la rotación
+
+    // Velocidad de rotación
+    const rotationSpeed = 0.001;
+
+    useFrame(() => {
+        // Rotación en el eje Y
+        if (!pcRef.current) return;
+        pcRef.current.rotation.y += rotationSpeed * direction;
+
+        // Si la rotación alcanza los límites, cambiar la dirección
+        if (pcRef.current.rotation.y >= 0.2 || pcRef.current.rotation.y <= -0.2) {
+            setDirection(direction * -1); // Cambiar la dirección
+        }
+    });
+
     return (
-        <mesh>
+        <mesh ref={pcRef}>
             <hemisphereLight intensity={3} groundColor="black" />
             <spotLight position={[-20, 50, -20]} angle={0.12} intensity={100} />
             <pointLight intensity={100} />
@@ -52,20 +53,20 @@ function PcCanvas() {
     return (
         <Canvas
             className="h-48 w-48"
-            frameloop="demand"
+            frameloop="always"
             shadows
             dpr={[1, 2]}
             camera={{ position: [20, 3, 5], fov: 25 }}
             gl={{ preserveDrawingBuffer: true }}
         >
-            <Suspense fallback={<CanvasLoader />}>
+            <React.Suspense fallback={<CanvasLoader />}>
                 <OrbitControls
                     enableZoom={false}
                     maxPolarAngle={Math.PI / 2}
                     minPolarAngle={Math.PI / 2}
                 />
                 <PcModel />
-            </Suspense>
+            </React.Suspense>
 
             <Preload all />
         </Canvas>
