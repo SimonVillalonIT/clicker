@@ -5,7 +5,7 @@ export default function Updrades() {
     const { upgradesRef, upgrades } = useUpgrades();
 
     return (
-        <section className="space-y-8 py-4">
+        <section className="space-y-8 py-4 backdrop-blur-sm">
             <h2 className="text-center text-2xl font-black">Mejoras</h2>
 
             <section ref={upgradesRef} className="space-y-8 px-2">
