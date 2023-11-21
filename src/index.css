@@ -1,9 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 @layer base {
     body {
         @apply bg-black text-white;
     }
+}
+
+
+/* Archivo CSS */
+
+.contenedor {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+@keyframes dropAndFade {
+    0% {
+        opacity: 1;
+        transform: translateY(0px);
+        /* Mover hacia arriba */
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100px);
+        /* Desvanecer hacia abajo */
+        display: none;
+    }
+}
+
+.numero {
+    position: absolute;
+    animation: dropAndFade 1s forwards;
+    font-size: 24px;
+    font-style: 900;
+    z-index: 10;
+    /* Estilos para el número */
+    /* Puedes agregar estilos de tamaño, color, etc. aquí */
 }

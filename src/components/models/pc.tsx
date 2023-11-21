@@ -52,11 +52,11 @@ function PcModel() {
 function PcCanvas() {
     return (
         <Canvas
-            className="h-48 w-48"
+            className="relative h-full w-full"
             frameloop="always"
             shadows
             dpr={[1, 2]}
-            camera={{ position: [20, 3, 5], fov: 25 }}
+            camera={{ position: [20, 3, 5], fov: 20 }}
             gl={{ preserveDrawingBuffer: true }}
         >
             <React.Suspense fallback={<CanvasLoader />}>
@@ -67,7 +67,6 @@ function PcCanvas() {
                 />
                 <PcModel />
             </React.Suspense>
-
             <Preload all />
         </Canvas>
     );
