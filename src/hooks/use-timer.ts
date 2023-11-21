@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { useAppContext } from "../contexts/app";
 
-const GAME_DURATION = 15000 as const; // ms
+const GAME_DURATION = 3599999 as const; // ms
 
 const formatter = new Intl.DateTimeFormat("es-AR", {
     minute: "2-digit",

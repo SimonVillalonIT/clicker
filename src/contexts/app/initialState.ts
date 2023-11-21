@@ -81,6 +81,9 @@ const initialState: AppState = {
             ],
         },
     ],
+    clicks: 0,
+    consecutiveClicks: 0,
+    multiplier: 1,
 };
 
 export default initialState;

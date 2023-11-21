@@ -1,7 +1,7 @@
 import { useAppContext } from "../contexts/app";
 
 export default function Score() {
-    const { balance, balancePerClick, balancePerSecond } = useAppContext();
+    const { balance, balancePerClick, balancePerSecond, multiplier } = useAppContext();
 
     const formatter = new Intl.NumberFormat("es-AR");
 
@@ -11,11 +11,11 @@ export default function Score() {
 
             <div className="space-x-1.5">
                 <span className="block text-center text-sm font-medium">
-                    {formatter.format(balancePerClick)} por click
+                    {formatter.format(balancePerClick * multiplier)} por click
                 </span>
 
                 <span className="block text-center text-sm font-medium">
-                    {formatter.format(balancePerSecond)} por segundo
+                    {formatter.format(balancePerSecond * multiplier)} por segundo
                 </span>
             </div>
         </div>

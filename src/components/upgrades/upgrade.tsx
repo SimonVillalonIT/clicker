@@ -29,11 +29,7 @@ export default function Upgrade(upgrade: UpgradeProps) {
     };
 
     return (
-        <article
-            tabIndex={1}
-            className="flex items-center justify-center backdrop-blur-sm"
-            onKeyUp={handleKeyUp}
-        >
+        <article tabIndex={1} className="flex items-center justify-center" onKeyUp={handleKeyUp}>
             <div className="grid aspect-square w-[56px] place-items-center">
                 <img
                     src={`/imgs/${id}.png`}
