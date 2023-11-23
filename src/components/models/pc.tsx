@@ -16,7 +16,7 @@ const CanvasLoader = () => {
 
 function PcModel() {
     const pc = useGLTF("/models/old_pc.glb");
-    const pcRef = React.useRef<THREE.mesh>(null);
+    const pcRef = React.useRef<THREE.Mesh>(null);
 
     const [direction, setDirection] = React.useState(1); // Estado para controlar la dirección de la rotación
 
