@@ -13,9 +13,9 @@ export default function Multipier() {
             ></div>
 
             <span className="absolute bottom-0 left-12 font-semibold leading-none">x1</span>
-            <span className="absolute bottom-52 right-12 font-semibold leading-none">x2</span>
-            <span className="absolute left-12 top-[429px] font-semibold leading-none">x3</span>
-            <span className="absolute right-12 top-52 font-semibold leading-none">x4</span>
+            <span className="absolute bottom-[162px] right-12 font-semibold leading-none">x2</span>
+            <span className="absolute left-12 top-[330px] font-semibold leading-none">x3</span>
+            <span className="absolute right-12 top-[162px] font-semibold leading-none">x4</span>
             <span className="absolute left-12 font-semibold leading-none">x5</span>
         </div>
     );
