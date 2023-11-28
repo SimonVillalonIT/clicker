@@ -8,7 +8,8 @@ export default function reducer(state: AppState, action: AppAction): AppState {
             return {
                 ...state,
                 started: true,
-                balance: state.balance + state.balancePerClick,
+                balance: state.balancePerClick,
+                clicks: 1,
             };
 
         case Types.END_GAME:
@@ -20,7 +21,22 @@ export default function reducer(state: AppState, action: AppAction): AppState {
         case Types.INCREMENT_BALANCE:
             return {
                 ...state,
-                balance: state.balance + payload,
+                balance: state.balance + payload.value * state.multiplier,
+                clicks: state.clicks + 1,
+                ...(payload.type === "click" && { consecutiveClicks: state.consecutiveClicks + 1 }),
+            };
+
+        case Types.SET_MULTIPLIER:
+            return {
+                ...state,
+                multiplier: payload,
+            };
+
+        case Types.RESET_MULTIPLIER:
+            return {
+                ...state,
+                consecutiveClicks: 0,
+                multiplier: 1,
             };
 
         case Types.UPDATE_UPGRADE_TIER: {

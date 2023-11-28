@@ -18,6 +18,9 @@ export interface AppState {
     balancePerClick: number;
     balancePerSecond: number;
     upgrades: Upgrade[];
+    clicks: number;
+    consecutiveClicks: number;
+    multiplier: number;
 }
 
 export type EndGame = () => void;
@@ -33,6 +36,8 @@ export enum Types {
     START_GAME,
     END_GAME,
     INCREMENT_BALANCE,
+    SET_MULTIPLIER,
+    RESET_MULTIPLIER,
     UPDATE_UPGRADE_TIER,
 }
 
@@ -47,7 +52,18 @@ export type AppAction =
       }
     | {
           type: Types.INCREMENT_BALANCE;
+          payload: {
+              value: number;
+              type: "click" | "second";
+          };
+      }
+    | {
+          type: Types.SET_MULTIPLIER;
           payload: number;
+      }
+    | {
+          type: Types.RESET_MULTIPLIER;
+          payload: null;
       }
     | {
           type: Types.UPDATE_UPGRADE_TIER;

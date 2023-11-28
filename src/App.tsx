@@ -4,11 +4,10 @@ import { Miscellaneous, Score, Clicker, Footer, Upgrades } from "./components";
 export default function App() {
     return (
         <AppContextProvider>
-            <img src="/imgs/bg.jpg" className="fixed -z-[1] min-h-screen opacity-50" />
+            <img src="/imgs/abg2.png" className="fixed -z-[1] min-h-screen opacity-25" />
 
             <div className="grid min-h-screen w-full grid-cols-[2fr_6fr_2fr] divide-x divide-neutral-900">
                 <Miscellaneous />
-
                 <section className="grid grid-rows-[2fr_6fr_2fr]">
                     <Score />
 
@@ -19,9 +18,7 @@ export default function App() {
                     <Footer />
                 </section>
 
-                {
-                    //<Upgrades />
-                }
+                <Upgrades />
             </div>
         </AppContextProvider>
     );

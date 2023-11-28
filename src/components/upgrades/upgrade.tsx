@@ -12,6 +12,15 @@ const tierColorsMap = {
     diamond: "#233d91",
 };
 
+const focusColorMap = {
+    default: "focus-visible:ring-[#ffffff]",
+    bronze: "focus-visible:ring-[#cd7f32]",
+    silver: "focus-visible:ring-[#adaaaa]",
+    gold: "focus-visible:ring-[#ffd700]",
+    platinum: "focus-visible:ring-[#3c72c7]",
+    diamond: "focus-visible:ring-[#233d91]",
+};
+
 export default function Upgrade(upgrade: UpgradeProps) {
     const { id, name, type, tiers } = upgrade;
     const { handleUpgrade } = useAppContext();
@@ -31,7 +40,9 @@ export default function Upgrade(upgrade: UpgradeProps) {
     return (
         <article
             tabIndex={1}
-            className="flex items-center justify-center backdrop-blur-sm"
+            className={`flex h-[74px] items-center justify-center rounded-md outline-none focus-visible:ring-2 ${
+                focusColorMap[currentTier?.tier ?? "default"]
+            }`}
             onKeyUp={handleKeyUp}
         >
             <div className="grid aspect-square w-[56px] place-items-center">
