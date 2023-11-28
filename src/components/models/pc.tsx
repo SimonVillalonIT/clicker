@@ -15,6 +15,11 @@ const CanvasLoader = () => {
 };
 
 function PcModel() {
+    window.addEventListener("keyup", e => {
+        if (e.key === ".") {
+            if (!pcRef.current) return;
+        }
+    });
     const pc = useGLTF("/models/old_pc.glb");
     const pcRef = React.useRef<THREE.Mesh>(null);
 

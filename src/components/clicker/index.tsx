@@ -3,15 +3,13 @@ import { useAppContext } from "../../contexts/app";
 import PcCanvas from "../models/pc";
 
 export default function Clicker() {
-    const {} = useAppContext();
-    const [numeros, setNumeros] = useState<{ numero: number; style: any }[]>([]);
+    const { balancePerClick, multiplier } = useAppContext();
+    const [numeros, setNumeros] = useState<{ style: any }[]>([]);
 
     const mostrarNumeros = () => {
-        const colors = ["#95f4b0", "#3fff00", "#006efe", "#9900ff", "#f578b3"];
         setNumeros(state => [
             ...state,
             {
-                numero: 10,
                 style: {
                     color: "#fff",
                     left: Math.floor(Math.random() * 250).toString() + "px",
@@ -20,20 +18,26 @@ export default function Clicker() {
             },
         ]);
     };
+    const keyEffect = e => {
+        if (e.key === ".") {
+            mostrarNumeros();
+        }
+    };
     useEffect(() => {
-        window.addEventListener("keyup", e => {
-            if (e.key === ".") {
-                mostrarNumeros();
-            }
-        });
+        window.addEventListener("keyup", keyEffect);
+        return () => {
+            window.removeEventListener("keyup", keyEffect);
+        };
     }, []);
     return (
         <div className="contenedor">
-            {numeros.map((num, index) => (
-                <span key={index} className="numero" style={num.style}>
-                    {"+" + num.numero}
-                </span>
-            ))}
+            {numeros.map((num, i) => {
+                return (
+                    <span key={i} className="numero" style={num.style}>
+                        {"+" + balancePerClick * multiplier}
+                    </span>
+                );
+            })}
             <PcCanvas />
         </div>
     );
